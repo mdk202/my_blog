@@ -1,11 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-</head>
-<body>
-    {{ content }}
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock css %}
+
+
+{% block content %}
+    <h1 class="mt-5 pt-5">Новостной блог об IT</h1>
+    <h3 class="mt-3">На сайте MyBlog представлены новости и аналитические материалы мира высоких
+        технологий. В поле внимания CNews попадают технологические инновации, интересные проекты,
+        финансовая сторона бизнеса ИТ-компаний, тенденции развития отрасли, последние научные
+        разработки.</h3>
+{% endblock content %}
+
+
+{% block footer %}
+    <footer class="py-4 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; MyBlog 2025</p>
+        </div>
+    </footer>
+{% endblock footer %}
