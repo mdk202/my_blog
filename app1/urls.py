@@ -24,6 +24,7 @@ from app1 import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls', namespace='main')),
+    path('catalog/', include('articles.urls', namespace='catalog')),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:
