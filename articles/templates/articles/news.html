@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12 col-md-12 p-4">
+        <div class="container">
+            <div class="card mb-2 w-100">
+                <div class="card-header">
+                    <h6 class="card-title">
+                        <a class="text-uppercase" data-toggle="collapse">
+                            <b>{{ article.title }}</b>
+                        </a>
+                    </h6>
+                </div>
+                <div id="{{ article.id }}" class="collapse show">
+                    <img class="image" src="{{ article.image.url }}" alt="{{ article.title }}">
+                    <div class="card-body" id="text-news">
+                        <p>{{ article.description | linebreaks}}</p>
+                    </div>
+                    <div
+                        class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                        <span class="text-muted">Создан: {{ article.date_creation }} | Обновлен: {{ article.date_update }} </span>
+
+                        <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
+                            <li class="list-inline-item">
+                                <a href="#" class="text-primary mr-2">
+                                    <img class="mx-1" src="{% static "deps/icons/comment.svg" %}" alt="..." width="12" height="12">
+                                </a> 3120
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="text-primary mr-2">
+                                    <img class="mx-1" src="{% static "deps/icons/like.svg" %}" alt="..." width="12" height="12">
+                                </a> 114
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 comment">
+        <div class="container">
+            <div class="bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                <h3 class="editContent">Оставить отзыв</h3>
+                <form class="mt-4">
+                    <div class="row my-4">
+                        <div class="col-lg-12 form-group editContent">
+                            <label for="contactcomment" class="editContent">Ваш комментарий *</label>
+                            <textarea class="form-control" rows="5" id="contactcomment" placeholder="Введите текст комментария" required=""></textarea>
+                        </div>
+                        <div class="col-lg-6 my-4 form-group editContent">
+                            <label for="contactusername" class="editContent">Имя *</label>
+                            <input type="text" class="form-control" id="contactusername" placeholder="Введите ваше имя" required="">
+                        </div>
+                        <div class="col-lg-6 my-4 form-group editContent">
+                            <label for="contactemail" class="editContent">Email *</label>
+                            <input type="email" class="form-control" id="contactemail" placeholder="Введите ваш email" required="">
+                        </div>
+                    </div>
+                    <button type="submit" class="mt-1 btn btn-success py-3">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 comment">
+        <div class="container">
+            <div class="media bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                <h3 class="editContent">Комментарии</h3>
+                <img src="../deps/images/avatar.png" class="mr-3" alt="image">
+                <div class="media-body mt-4">
+                    <h5 class=" editContent">Александр Овечкин</h5>
+                    <p class="editContent">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores deleniti repellat
+                        aspernatur vitae laudantium ratione sapiente quidem? Atque, animi, dolores quod
+                        cupiditate, hic eveniet inventore consequuntur distinctio ea aut repellat.
+                    </p>
+                    <p class="date-comment text-muted">Дата создания: 15 апреля 2024 14:55 <a class="mx-5" href="#">Ответить</a></p>
+                    <div class="media mt-4 editContent" id="parent">
+                        <a class="pr-3" href="#">
+                            <img src="../deps/images/avatar.png" alt="image">
+                        </a>
+                        <div class="media-body mt-4">
+                            <h5 class="editContent">Leia Organa</h5>
+                            <p class="editContent">Cras sitamet
+                                nibh libero, in gravida nulla. Nulla vel metus
+                                scelerisque ante sollicitudin. Cras purus odio,
+                                vestibulum in vulputate at, tempus viverra turpis. Fusce
+                                condimentum nunc ac nisi vulputate fringilla..</p>
+                            <p class="date-comment text-muted">Дата создания: 15 апреля 2024 14:55 <a class="mx-5" href="#">Ответить</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block footer %}
+    <footer class="py-4 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; MyBlog 2025</p>
+        </div>
+    </footer>
+{% endblock footer %}

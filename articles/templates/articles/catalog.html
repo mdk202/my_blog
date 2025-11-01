@@ -38,152 +38,38 @@
         </form>
     </div>
 
-    <div class="col-lg-6 col-md-12 p-4">
-        <div class="card mb-2 w-100">
-            <div class="card-header">
-                <h6 class="card-title">
-                    <a class="text-muted text-uppercase" data-toggle="collapse" href="../articles/news.html">
-                        <b>Из ядра ОС Android убрали поддержку интерактивной
-                            архитектуры RISC-V</b>
-                    </a>
-                </h6>
-            </div>
-            <div id="question1" class="collapse show">
-                <img src="../deps/images/news/1.jpg" class="card-img-top" alt="...">
-                <div class="card-body text-truncate">
-                    Google, на протяжении нескольких лет трудившаяся
-                    над реализацией поддержки набирающей популярность открытой процессорной
-                    архитектуры RISC-V в мобильной ОС Android, сделала шаг в противоположном
-                    направлении.
+    {% for article in articles %}
+        <div class="col-lg-6 col-md-12 p-4">
+            <div class="card mb-2 w-100">
+                <div class="card-header">
+                    <h6 class="card-title">
+                        <a class="text-muted text-uppercase" data-toggle="collapse" href="{% url "catalog:article" article.slug %}">
+                            <b>{{ article.title }}</b>
+                        </a>
+                    </h6>
                 </div>
-                <div
-                    class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                    <span class="text-muted">Дата публикации: 15 апреля 2024</span>
-
-                    <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="{% static "deps/icons/comment.svg" %}" alt="..." width="12"
-                                    height="12">
-                            </a> 3120</li>
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="{% static "deps/icons/like.svg" %}" alt="..." width="12"
-                                    height="12">
-                            </a> 114</li>
-                    </ul>
+                <div class="collapse show">
+                    <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.title }}">
+                    <div class="card-body text-truncate">{{ article.summary }}</div>
+                    <div class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
+                        <span class="text-muted">Дата публикации: {{ article.date_creation }}</span>
+                        <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
+                            <li class="list-inline-item">
+                                <a href="#" class="text-primary mr-2">
+                                    <img class="mx-1" src="{% static "deps/icons/comment.svg" %}" alt="..." width="12" height="12">
+                                </a> 3120
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" class="text-primary mr-2">
+                                    <img class="mx-1" src="{% static "deps/icons/like.svg" %}" alt="..." width="12" height="12">
+                                </a> 114
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-6 col-md-12 p-4">
-        <div class="card mb-2 w-100">
-            <div class="card-header">
-                <h6 class="card-title">
-                    <a class="text-muted text-uppercase" data-toggle="collapse" href="#">
-                        <b>Создатель знаменитой СУБД продается за бесценок</b>
-                    </a>
-                </h6>
-            </div>
-            <div id="question2" class="collapse show">
-                <img src="../deps/images/news/2.jpg" class="card-img-top" alt="...">
-                <div class="card-body text-truncate">
-                    За создателем MariaDB – форка знаменитой СУБД MySQL – выстроилась очередь из
-                    желающих заполучить перспективный, но страдающий от острой нехватки
-                    финансирования бизнес. Один из последних претендентов – американская фирма
-                    Progress Software, разработчик популярной платформы Progress OpenEdge. Компания
-                    сегодня готова заплатить за MariaDB в 16 раз меньше по сравнению с ее
-                    первоначальной оценкой накануне относительно недавнего IPO.
-                </div>
-                <div
-                    class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                    <span class="text-muted">Дата публикации: 15 апреля 2024</span>
-
-                    <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="../deps/icons/comment.svg" alt="..." width="12"
-                                    height="12">
-                            </a> 3120</li>
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="../deps/icons/like.svg" alt="..." width="12"
-                                    height="12">
-                            </a> 114</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6 col-md-12 p-4">
-        <div class="card mb-2 w-100">
-            <div class="card-header">
-                <h6 class="card-title">
-                    <a class="text-muted text-uppercase" data-toggle="collapse" href="#">
-                        <b>Уход из России обошелся Qiwi в 37 миллиардов рублей</b>
-                    </a>
-                </h6>
-            </div>
-            <div id="question3" class="collapse show">
-                <img src="../deps/images/news/3.jpg" class="card-img-top" alt="...">
-                <div class="card-body text-truncate">
-                    Убыток Qiwi от продажи российского подразделения составил 37 млрд руб. Деньги от
-                    продажи данного актива в сумме 23,75 млрд руб. пока так и не поступили. А в
-                    «Киви-банке», у которого отозвали лицензию, у Qiwi «застряло» 2,3 млрд руб.
-                </div>
-                <div
-                    class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                    <span class="text-muted">Дата публикации: 15 апреля 2024</span>
-
-                    <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="../deps/icons/comment.svg" alt="..." width="12"
-                                    height="12">
-                            </a> 3120</li>
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="../deps/icons/like.svg" alt="..." width="12"
-                                    height="12">
-                            </a> 114</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6 col-md-12 p-4">
-        <div class="card mb-2 w-100">
-            <div class="card-header">
-                <h6 class="card-title">
-                    <a class="text-muted text-uppercase" data-toggle="collapse" href="#">
-                        <b>Исследование VK Cloud: спрос на специалистов по Kubernetes вырос
-                            на 36% за три года</b>
-                    </a>
-                </h6>
-            </div>
-            <div id="question4" class="collapse show">
-                <img src="../deps/images/news/4.jpg" class="card-img-top" alt="...">
-                <div class="card-body text-truncate">
-                    Количество вакансий, где необходимы навыки работы с Kubernetes, увеличивается за
-                    счет роста спроса на специалистов с опытом работы более трех лет, показало
-                    исследование VK Cloud и hh.ru.
-
-                    В четвертом квартале 2023 г. количество вакансий для специалистов со знанием
-                    технологии Kubernetes выросло на 36% в сравнении с показателем первого квартала
-                    2021 г.
-                </div>
-                <div
-                    class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
-                    <span class="text-muted">Дата публикации: 15 апреля 2024</span>
-
-                    <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="../deps/icons/comment.svg" alt="..." width="12"
-                                    height="12">
-                            </a> 3120</li>
-                        <li class="list-inline-item"><a href="#" class="text-primary mr-2">
-                                <img class="mx-1" src="../deps/icons/like.svg" alt="..." width="12"
-                                    height="12">
-                            </a> 114</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
 </div>
 
 <nav aria-label="Page navigation example">
@@ -207,7 +93,7 @@
 {% block footer %}
     <footer class="py-4 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; MyBlog 2024</p>
+            <p class="m-0 text-center text-white">Copyright &copy; MyBlog 2025</p>
         </div>
     </footer>
 {% endblock footer %}

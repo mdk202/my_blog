@@ -45,6 +45,10 @@ a {
     margin-left: 10%;
 }
 
+.comment{
+    color: #000000;
+}
+
 .date-comment{
     margin-top: -10px; 
     font-size: 12px;
