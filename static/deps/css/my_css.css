@@ -1,5 +1,11 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     background: linear-gradient(270deg, #bfcee0 0%, #610202 100%);
+    margin-bottom: 60px;
 }
 
 .project-information{
