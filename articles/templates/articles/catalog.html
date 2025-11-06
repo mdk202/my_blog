@@ -38,14 +38,14 @@
     </div>
 
     {% if request.GET.q %}
-        <h3 class="mt-4">Результаты поиска по запросу "{{ request.GET.q }}"</h3>
+        <h3 class="mt-4 searh-article">Результаты поиска по запросу "{{ request.GET.q }}"</h3>
         {% if not articles %}
-            <h2 class="mt-4">По запросу ничего не найдено</h2>
+            <h2 class="mt-4 searh-article">По запросу ничего не найдено</h2>
         {% endif %}
     {% endif %}
 
     {% if request.GET.popular and not articles %}
-        <h1 class="mt-4">Популярных статей не найдено</h1>
+        <h1 class="mt-4 searh-article">Популярных статей не найдено</h1>
     {% endif %}
 
     {% for article in articles %}
