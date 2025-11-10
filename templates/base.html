@@ -89,10 +89,13 @@
             <div class="row mt-1">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-10">
+                    {% include "includes/notifications.html" %}
                     {% block content %}{% endblock content %}
                 </div>
     </section>
     {% block footer %}{% endblock footer %}
+    <script src="{% static "deps/js/jquery/jquery-3.7.1.min.js" %}"></script>
+    <script src="{% static "deps/js/jquery-ajax.js" %}"></script>
     <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
 </body>
 </html>
