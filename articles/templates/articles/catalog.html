@@ -63,18 +63,7 @@
                     <div class="card-body text-truncate">{{ article.summary }}</div>
                     <div class="card-footer bg-transparent d-sm-flex align-items-sm-center border-top-0 pt-0">
                         <span class="text-muted">Дата публикации: {{ article.date_creation }}</span>
-                        <ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
-                            <li class="list-inline-item">
-                                <a href="#" class="text-primary mr-2">
-                                    <img class="mx-1" src="{% static "deps/icons/comment.svg" %}" alt="..." width="12" height="12">
-                                </a> 3120
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" class="text-primary mr-2">
-                                    <img class="mx-1" src="{% static "deps/icons/like.svg" %}" alt="..." width="12" height="12">
-                                </a> 114
-                            </li>
-                        </ul>
+                        {% include "articles/includes/included_reactions.html" %}
                     </div>
                 </div>
             </div>

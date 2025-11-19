@@ -1,0 +1,24 @@
+{% load static %}
+
+
+<ul class="list-inline text-nowrap mb-0 ml-auto mt-2 mt-sm-0">
+    <li class="list-inline-item">
+        <a href="#" class="text-primary mr-2">
+            <img class="mx-1" src="{% static "deps/icons/comment.svg" %}" alt="..." width="12" height="12">
+        </a> 31
+    </li>
+    <li class="list-inline-item like-items">
+        <a href="{% url "catalog:liked" article.slug %}" class="btn like-button" id="item{{ article.id }}" data-article-id="{{ article.id }}">
+            {% csrf_token %}
+            {% if article.id in articles_liked_user %}
+                <input type="hidden" id="likes-article" value="1">
+                <style>#item{{ article.id }} {background-color: red;}</style>
+            {% else %}
+                <input type="hidden" id="likes-article" value="0">
+                <style>#item{{ article.id }} {background-color: white;}</style>
+            {% endif %}
+            <img class="mx-1" src="{% static "deps/icons/like.svg" %}" alt="Like Icon" width="12" height="12">
+            <span id="likes-on-article-count">{{ article.count_likes_on_articles }}</span>
+        </a>
+    </li>
+</ul>

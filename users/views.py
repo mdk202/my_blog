@@ -2,12 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib import auth, messages
+from django.db.models import Count
 from django.views.generic import CreateView, UpdateView
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 
 from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
+from articles.models import Like
 
 
 class UserLoginView(LoginView):
@@ -21,9 +23,21 @@ class UserLoginView(LoginView):
         return reverse_lazy('main:index')
 
     def form_valid(self, form):
+        session_key = self.request.session.session_key
         user = form.get_user()
         if user:
             auth.login(self.request, user)
+            if session_key:
+                # Добавляем пользователя на лайки, которые он поставил, являясь анонимом
+                Like.objects.filter(session_key=session_key).update(user=user)
+                # Получаем дубликаты, на которых пользователь уже ставил лайк
+                duplicates = Like.objects.filter(user=user)\
+                                         .values_list('article', flat=True)\
+                                         .alias(duplicate=Count('article'))\
+                                         .filter(duplicate__gt=1)
+                if duplicates:
+                    Like.objects.filter(article__in=duplicates,
+                                        session_key=session_key).delete()
             messages.success(self.request,
                              f'{user.username}, Вы вошли в аккаунт!')
         return HttpResponseRedirect(self.get_success_url())
@@ -40,10 +54,13 @@ class UserRegistrationView(CreateView):
     success_url = reverse_lazy('user:profile')
 
     def form_valid(self, form):
+        session_key = self.request.session.session_key
         user = form.instance
         if user:
             form.save()
             auth.login(self.request, user)
+            if session_key:
+                Like.objects.filter(session_key=session_key).update(user=user)
             messages.success(self.request,
                              f'{user.username}, Вы успешно зарегистрировалась!')
         return HttpResponseRedirect(self.success_url)
