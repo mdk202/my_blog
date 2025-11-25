@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load articles_tags %}
 
 
 {% block css %}
@@ -34,24 +35,26 @@
         </div>
     </div>
 
-    <div class="col-lg-12 comment">
-        <div class="container">
+    <div class="col-lg-12">
+        <div class="container" id="form-comments">
             <div class="bg-white p-4 mb-4 mx-2 rounded custom-shadow">
-                <h3 class="editContent">Оставить отзыв</h3>
-                <form class="mt-4">
+                <h3 class="editContent">Оставить комментарий</h3>
+                {% if not user.is_authenticated %}
+                    <h6 class="editContent">(оставлять комментарии могут только авторизованные пользователи)</h6>
+                {% endif %}
+                <form action="{% url "catalog:commented" article.slug %}" method="post" class="mt-4">
                     <div class="row my-4">
-                        <div class="col-lg-12 form-group editContent">
-                            <label for="contactcomment" class="editContent">Ваш комментарий *</label>
-                            <textarea class="form-control" rows="5" id="contactcomment" placeholder="Введите текст комментария" required=""></textarea>
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_parent" id="id_comment_parent" value="">
+                        {% for field in form %}
+                        <div class="col-lg-12 form-group">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="alert alert-danger alert-dismissible fade show">{{ field.errors }}</div>
+                            {% endif %}
                         </div>
-                        <div class="col-lg-6 my-4 form-group editContent">
-                            <label for="contactusername" class="editContent">Имя *</label>
-                            <input type="text" class="form-control" id="contactusername" placeholder="Введите ваше имя" required="">
-                        </div>
-                        <div class="col-lg-6 my-4 form-group editContent">
-                            <label for="contactemail" class="editContent">Email *</label>
-                            <input type="email" class="form-control" id="contactemail" placeholder="Введите ваш email" required="">
-                        </div>
+                        {% endfor %}
                     </div>
                     <button type="submit" class="mt-1 btn btn-success py-3">Отправить</button>
                 </form>
@@ -59,35 +62,29 @@
         </div>
     </div>
 
-    <div class="col-lg-12 comment">
+    {% tag_comments article as comments %}
+    <div class="col-lg-12" id="block-comments">
         <div class="container">
-            <div class="media bg-white p-4 mb-4 mx-2 rounded custom-shadow">
-                <h3 class="editContent">Комментарии</h3>
-                <img src="../deps/images/avatar.png" class="mr-3" alt="image">
-                <div class="media-body mt-4">
-                    <h5 class=" editContent">Александр Овечкин</h5>
-                    <p class="editContent">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores deleniti repellat
-                        aspernatur vitae laudantium ratione sapiente quidem? Atque, animi, dolores quod
-                        cupiditate, hic eveniet inventore consequuntur distinctio ea aut repellat.
-                    </p>
-                    <p class="date-comment text-muted">Дата создания: 15 апреля 2024 14:55 <a class="mx-5" href="#">Ответить</a></p>
-                    <div class="media mt-4 editContent" id="parent">
-                        <a class="pr-3" href="#">
-                            <img src="../deps/images/avatar.png" alt="image">
-                        </a>
-                        <div class="media-body mt-4">
-                            <h5 class="editContent">Leia Organa</h5>
-                            <p class="editContent">Cras sitamet
-                                nibh libero, in gravida nulla. Nulla vel metus
-                                scelerisque ante sollicitudin. Cras purus odio,
-                                vestibulum in vulputate at, tempus viverra turpis. Fusce
-                                condimentum nunc ac nisi vulputate fringilla..</p>
-                            <p class="date-comment text-muted">Дата создания: 15 апреля 2024 14:55 <a class="mx-5" href="#">Ответить</a></p>
-                        </div>
+            <div class="bg-white p-3 mb-4 mx-2 custom-shadow">
+                <h3>Комментарии <b class="count-comments">{{ article.count_comments_on_article }}</b></h3>
+            </div>
+            {% for comment in comments %}
+                <div class="media bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                    {% if comment.user.image %}
+                        <img src="{{ comment.user.image.url }}" class="img-fluid rounded-circle" alt="Аватар пользователя" style="max-width:50px; height:auto;">
+                    {% else %}
+                        <img src="{% static "deps/images/avatar.png" %}" class="mr-3" alt="Аватар пользователя">
+                    {% endif %}
+                    <div class="media-body mt-2">
+                        <h5 class="user-comment">{{ comment.user }}</h5>
+                        <p class="text-comment">{{ comment.text_comment }}</p>
+                        <p class="date-comment text-muted">Дата создания: {{ comment.created_timestamp }}
+                            <a class="mx-5 reply-comment" href="#form-comments" onclick="addComment('{{ comment.user }}', '{{ comment.id }}')">Ответить</a>
+                        </p>
+                        {% include 'articles/includes/comments_children.html' with comments=comment.nested_children %}
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

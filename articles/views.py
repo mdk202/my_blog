@@ -1,8 +1,13 @@
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import FormMixin
 
+from articles.forms import CommentsForm
 from articles.mixins import ReactionMixin
 from articles.models import Article, Like
 from articles.utils import q_search
@@ -39,10 +44,18 @@ class CatalogView(ReactionMixin, ListView):
         return self.get_mixin_context(context)
 
 
-class ArticleView(ReactionMixin, DetailView):
+class ArticleView(FormMixin, ReactionMixin, DetailView):
     template_name = 'articles/news.html'
     slug_url_kwarg = 'article_slug'
     context_object_name = 'article'
+    form_class = CommentsForm
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if self.request.user.is_authenticated:
+            initial['username'] = self.request.user.username
+            initial['email'] = self.request.user.email
+        return initial
 
     def get_object(self, queryset=None):
         news = Article.objects.get(slug=self.kwargs.get(self.slug_url_kwarg))
@@ -52,6 +65,30 @@ class ArticleView(ReactionMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = self.object.title
         return self.get_mixin_context(context)
+
+
+class AddCommentView(LoginRequiredMixin, ArticleView):
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('catalog:article', kwargs={'article_slug':
+                                                       self.get_object().slug})
+
+    def post(self, request, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return super().form_invalid(form)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.article = self.get_object()
+        if form.data['comment_parent']:
+            self.object.parent_id = int(form.data['comment_parent'])
+        self.object.save()
+        messages.success(self.request, f'{self.request.user.username},\
+                                         Ваш комментарий успешно добавлен!')
+        return super().form_valid(form)
 
 
 class AddLikeView(ReactionMixin, View):

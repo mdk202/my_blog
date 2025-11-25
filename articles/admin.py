@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from articles.models import Category, Article, Like
+from articles.models import Category, Article, Like, Comment
 
 
 @admin.register(Category)
@@ -16,3 +16,8 @@ class ArticalAdmin(admin.ModelAdmin):
 @admin.register(Like)
 class LikesAdmin(admin.ModelAdmin):
     list_display = ('article', 'user', 'created_timestamp')
+
+
+@admin.register(Comment)
+class CommentsAdmin(admin.ModelAdmin):
+    list_display = ('article', 'user', 'text_comment', 'parent', 'created_timestamp')

@@ -26,7 +26,8 @@ class ArticleManager(models.Manager):
     def counts_reactions(self, articles):
         """Возвращает QuerySet статей с аннотациями кол-ва реакций"""
         return self.filter(pk__in=articles).annotate(
-            count_likes_on_articles=models.Count('articles', distinct=True))
+            count_likes_on_article=models.Count('likes', distinct=True),
+            count_comments_on_article=models.Count('comments', distinct=True))
 
 
 class Article(models.Model):
@@ -86,10 +87,10 @@ class LikeManager(models.Manager):
 
 class Like(models.Model):
     article = models.ForeignKey(to=Article, on_delete=models.CASCADE,
-                                related_name='articles', verbose_name='Новость')
-    user = models.ForeignKey(to=User, on_delete=models.SET_DEFAULT,
-                             related_name='users', verbose_name='Пользователь',
-                             blank=True, null=True, default='Аноним')
+                                related_name='likes', verbose_name='Новость')
+    user = models.ForeignKey(to=User, on_delete=models.SET_NULL,
+                             related_name='likes', verbose_name='Пользователь',
+                             blank=True, null=True)
     session_key = models.CharField(verbose_name='Сессионный ключ', max_length=32,
                                    blank=True, null=True)
     created_timestamp = models.DateTimeField(verbose_name='Дата добавления',
@@ -104,5 +105,29 @@ class Like(models.Model):
 
     def __str__(self):
         if self.user:
-            return f'{self.article.title} - {self.user.username}'
-        return f'{self.article.title} - Аноним'
+            return f'{self.article} - {self.user}'
+        return f'{self.article} - Аноним'
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.SET_NULL,
+                             related_name='comments', verbose_name='Автор',
+                             blank=True, null=True)
+    text_comment = models.TextField(verbose_name='Комментарий', max_length=500)
+    parent = models.ForeignKey(to='self', on_delete=models.CASCADE,
+                               related_name='children', blank=True, null=True,
+                               verbose_name='Родительский комментарий')
+    article = models.ForeignKey(to=Article, on_delete=models.CASCADE,
+                                related_name='comments', verbose_name='Статья')
+    created_timestamp = models.DateTimeField(verbose_name='Дата добавления',
+                                             auto_now_add=True)
+
+    class Meta:
+        db_table = 'comment'
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        if self.user:
+            return f'{self.user} - {self.article}'
+        return f'Неизвестный - {self.article}'

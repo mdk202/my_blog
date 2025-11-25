@@ -8,12 +8,12 @@ body {
     margin-bottom: 60px;
 }
 
-.project-information, .searh-article{
-    color: #fae103;
-}
-
 a {
     text-decoration: none !important;
+}
+
+.project-information, .searh-article{
+    color: #fae103;
 }
 
 .card-header:not([class*=bg-]):not([class*=alpha-]) {
@@ -45,18 +45,16 @@ a {
     font-size: 20px;
 }
 
-#parent {
-    display: flex;
+#child {
     flex-wrap: wrap;
     margin-left: 10%;
 }
 
-.comment{
-    color: #000000;
+.text-comment{
+    word-break: break-all;
 }
 
 .date-comment{
     margin-top: -10px; 
     font-size: 12px;
 }
-
